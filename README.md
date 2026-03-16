@@ -7,6 +7,8 @@
 
 Reusable starter repository for a FastAPI service with a clear application layout, async SQLAlchemy, Docker support, and a small sample CRUD resource you can replace with your own domain.
 
+![architecture UML](./docs/uml/architecture.png)
+
 ## Getting Started
 
 These instructions will get you a copy of the project running on your local machine for development or as a starting point for a new FastAPI service.
@@ -178,9 +180,9 @@ Once the [git configuration steps](#configuring-git) are completed, you can crea
 The repository includes starter documentation assets that should evolve with your project:
 
 - Changelog: [`CHANGELOG.md`](./CHANGELOG.md)
-- Bruno collection: `docs/bruno_collection`
-- PlantUML architecture: `docs/uml/architecture.puml`
-- Documentation notes: `docs/README.md`
+- Bruno collection: [`docs/bruno_collection`](./docs/bruno_collection)
+- PlantUML architecture: [`docs/uml/architecture.puml`](./docs/uml/architecture.puml)
+- Documentation notes: [`docs/README.md`](./docs/README.md)
 
 ## Versions
 
