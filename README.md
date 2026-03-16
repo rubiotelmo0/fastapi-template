@@ -205,4 +205,6 @@ This project is licensed under the [MIT License](./LICENSE).
 Tasks to improve this template.
 
 - [ ] Add relevant agent skills.
+- [ ] Follow official pyproject project setup (`src/...`).
+- [ ] Add out of the box `pytest` support.
 - [ ] ...
