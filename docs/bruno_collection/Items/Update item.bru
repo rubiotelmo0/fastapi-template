@@ -1,0 +1,27 @@
+meta {
+  name: Update item
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseURL}}/items/{{itemId}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "description": "Updated from Bruno.",
+    "is_active": false
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.is_active: eq false
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,14 @@
+services:
+  api:
+    build:
+      context: ./fastapi_app
+    ports:
+      - "13000:8000"
+    volumes:
+      - "./db_volume:/volume"
+    environment:
+      APP_NAME: ${APP_NAME:-FastAPI Template}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      PORT: 8000
+      SQLALCHEMY_DATABASE_URL: ${SQLALCHEMY_SQLITE_DATABASE_URI_DOCKER:-sqlite+aiosqlite:////volume/app.db}
+    restart: on-failure

@@ -1,0 +1,31 @@
+@startuml
+
+frame "Client" {
+  [Swagger UI / Bruno] as client
+}
+
+node "FastAPI Template" {
+  [app/main.py] as main
+  [routers/main_router.py] as router
+  [dependencies.py] as dependencies
+  [business_logic/item_service.py] as service
+  [sql/schemas.py] as schemas
+  [sql/crud.py] as crud
+  [sql/models.py] as models
+  [sql/database.py] as database
+}
+
+database "SQLite Database" as db
+
+client --> router
+main --> router
+main --> database
+router --> dependencies
+router --> schemas
+router --> service
+service --> crud
+crud --> models
+crud --> db
+dependencies --> database
+
+@enduml

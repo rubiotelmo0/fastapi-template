@@ -1,0 +1,5 @@
+COMPOSE_PROJECT_NAME=fastapi-template
+APP_NAME=FastAPI Template
+APP_VERSION=0.1.0
+SQLALCHEMY_SQLITE_DATABASE_URI=sqlite+aiosqlite:///./app.db
+SQLALCHEMY_SQLITE_DATABASE_URI_DOCKER=sqlite+aiosqlite:////volume/app.db

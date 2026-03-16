@@ -1,0 +1,21 @@
+meta {
+  name: Health check
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseURL}}/
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq ok
+  res.body.app_name: isNotEmpty
+}
+
+settings {
+  encodeUrl: true
+}

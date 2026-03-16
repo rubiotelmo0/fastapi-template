@@ -1,0 +1,41 @@
+{
+  "name": "fastapi-template",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "openai.chatgpt",
+        "jebbs.plantuml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": false
+      }
+    }
+  },
+  "remoteUser": "vscode",
+  "forwardPorts": [
+    8000
+  ],
+  "portsAttributes": {
+    "8000": {
+      "label": "FastAPI app",
+      "onAutoForward": "notify"
+    }
+  },
+  "containerEnv": {
+    "GIT_AUTHOR_NAME": "${localEnv:FASTAPI_TEMPLATE_DEV_GIT_NAME}",
+    "GIT_AUTHOR_EMAIL": "${localEnv:FASTAPI_TEMPLATE_DEV_GIT_EMAIL}",
+    "GIT_COMMITTER_NAME": "${localEnv:FASTAPI_TEMPLATE_DEV_GIT_NAME}",
+    "GIT_COMMITTER_EMAIL": "${localEnv:FASTAPI_TEMPLATE_DEV_GIT_EMAIL}"
+  },
+  "runArgs": [
+    "--name",
+    "fastapi-template-dev"
+  ]
+}
