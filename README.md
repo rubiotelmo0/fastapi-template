@@ -203,6 +203,18 @@ Update this section with the maintainers of the repository or the team that owns
 
 This project is licensed under the [MIT License](./LICENSE).
 
+## Template Refactoring
+
+Once the template is cloned, it needs to be refactored for the project it will be used for. I personally recommend using a coding agent for this task. In any case, keep in mind that the following sections must be updated:
+
+* `README.md`: Replace the template explanation with a project-specific description.
+* `.devcontainer`: Update environment variable names and container names.
+* `fastapi_app`: Replace the example `Item` entity with the entities your project will use.
+* `docs`: Replace the single-item template example with documentation for your project’s entities.
+
+> [!TIP]
+> You can copy the list above into a coding agent, briefly explain what the new project is about and its main entities, and ask it to perform the necessary updates.
+
 ## Roadmap
 
 Tasks to improve this template.
