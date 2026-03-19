@@ -31,6 +31,8 @@ cp dot_env_example .env
 > [!IMPORTANT]
 > If you plan to run the service with [Docker Compose](#run-with-docker-compose) or inside the [`.devcontainer`](#devcontainer), steps 3 and 4 are not required. Those workflows install dependencies inside the container environment for you.
 
+For the devcontainer workflow specifically, VS Code runs `python -m pip install --user -r fastapi_app/requirements.txt` automatically after the container is created.
+
 3. Create and activate a virtual environment:
 
 ```bash
@@ -173,7 +175,8 @@ Once the [git configuration steps](#configuring-git) are completed, you can crea
 
 1. Press `Ctrl + Shift + P` to open VS Code's command palette
 2. Type `Dev Containers: Reopen in Container` and hit Enter
-3. That's it! The environment is now ready to use :)
+3. Wait for the initial `postCreateCommand` to finish installing `fastapi_app/requirements.txt`
+4. The environment is then ready to use
 
 ## Documentation
 

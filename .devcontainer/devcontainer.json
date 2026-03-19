@@ -18,6 +18,7 @@
       }
     }
   },
+  "postCreateCommand": "python -m pip install --user -r fastapi_app/requirements.txt",
   "remoteUser": "vscode",
   "forwardPorts": [
     8000
