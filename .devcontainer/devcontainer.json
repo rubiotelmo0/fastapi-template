@@ -10,7 +10,8 @@
         "ms-python.vscode-pylance",
         "ms-azuretools.vscode-docker",
         "openai.chatgpt",
-        "jebbs.plantuml"
+        "jebbs.plantuml",
+        "bruno-api-client.bruno"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
