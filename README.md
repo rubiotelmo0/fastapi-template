@@ -197,7 +197,7 @@ Use the issue tracker or the collaboration channel defined by the team adopting 
 
 ## Authors
 
-Update this section with the maintainers of the repository or the team that owns the template.
+Your Name – @YourTwitter – [YourEmail@example.com](mailto:YourEmail@example.com)
 
 ## License
 
