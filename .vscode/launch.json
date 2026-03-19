@@ -13,6 +13,7 @@
                 "app.main:app"
             ],
             "cwd": "${workspaceFolder}/fastapi_app",
+            "envFile": "${workspaceFolder}/.env",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/fastapi_app"
             },
