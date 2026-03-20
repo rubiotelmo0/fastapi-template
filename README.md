@@ -224,7 +224,8 @@ Tasks to improve this template.
 
 - [ ] Better explain each module under `fastapi_app`.
 - [ ] Separate `requirements.txt`, one for the devcontainer and the other one for production.
-- [ ] Add relevant agent skills.
+- [ ] Add relevant agent skills (generate `business_logic` modules, generate new entities, E2E testing...).
 - [ ] Follow official pyproject project setup (`src/...`).
 - [ ] Add out of the box `pytest` support.
+- [ ] Add out of the box GitHub and GitLab CI/CD support.
 - [ ] ...
