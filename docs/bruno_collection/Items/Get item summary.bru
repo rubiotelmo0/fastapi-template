@@ -1,0 +1,22 @@
+meta {
+  name: Get item summary
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseURL}}/items/summary
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.total_items: isNumber
+  res.body.active_items: isNumber
+  res.body.item_names: isArray
+}
+
+settings {
+  encodeUrl: true
+}

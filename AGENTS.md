@@ -6,10 +6,10 @@ This file applies to everything under `fastapi-template/`.
 
 Treat this repository as the FastAPI project being built from this codebase. Prefer changes that keep the application coherent and preserve the current layered structure:
 
-- `fastapi_app/app/routers/`: API layer
-- `fastapi_app/app/dependencies.py`: dependency wiring
-- `fastapi_app/app/business_logic/`: service layer
-- `fastapi_app/app/sql/`: database layer
+- `fastapi_app/app/routers/`: API layer. Standard CRUD endpoints should call the SQL CRUD helpers directly.
+- `fastapi_app/app/dependencies.py`: dependency wiring for database sessions and optional shared business-logic services.
+- `fastapi_app/app/business_logic/`: modular domain logic for derived responses, orchestration, or cross-entity workflows. Do not use it as a mandatory wrapper around CRUD.
+- `fastapi_app/app/sql/`: database layer with models, schemas, and CRUD helpers.
 
 ## Maintenance Rules
 

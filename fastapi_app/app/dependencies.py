@@ -5,12 +5,12 @@ from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.business_logic.item_service import ItemService
+from app.business_logic.item_summary import ItemSummaryService
 from app.sql.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
-ITEM_SERVICE = ItemService()
+ITEM_SUMMARY_SERVICE = ItemSummaryService()
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -23,6 +23,6 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         await db.close()
 
 
-def get_item_service() -> ItemService:
-    """Return the shared service layer instance."""
-    return ITEM_SERVICE
+def get_item_summary_service() -> ItemSummaryService:
+    """Return the shared business logic service instance."""
+    return ITEM_SUMMARY_SERVICE

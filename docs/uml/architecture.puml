@@ -8,7 +8,7 @@ node "FastAPI Template" {
   [app/main.py] as main
   [routers/main_router.py] as router
   [dependencies.py] as dependencies
-  [business_logic/item_service.py] as service
+  [business_logic/item_summary.py] as service
   [sql/schemas.py] as schemas
   [sql/crud.py] as crud
   [sql/models.py] as models
@@ -22,10 +22,57 @@ main --> router
 main --> database
 router --> dependencies
 router --> schemas
+router --> crud
 router --> service
+dependencies --> service
 service --> crud
+service --> models
+service --> schemas
+crud --> schemas
 crud --> models
-crud --> db
+crud --> database
 dependencies --> database
+database --> db
+
+note right of router
+  Defines the API endpoints.
+  CRUD routes call sql/crud.py directly.
+  The summary route delegates to business_logic/.
+end note
+
+note left of dependencies
+  Provides shared request dependencies,
+  including the database session and
+  optional business-logic services.
+end note
+
+note bottom of schemas
+  Holds request and response models.
+  CRUD uses ItemCreate and ItemUpdate.
+  Routers and services serialize through it.
+end note
+
+note right of crud
+  Implements persistence operations.
+  Consumes validated schema payloads
+  and reads/writes SQLAlchemy models.
+end note
+
+note right of service
+  Optional business logic for derived
+  responses and orchestration.
+  The example service builds ItemSummary
+  from stored item models.
+end note
+
+note bottom of database
+  Configures the SQLAlchemy engine,
+  base metadata, and async session factory.
+end note
+
+note bottom of models
+  Defines the persisted SQLAlchemy entities
+  used by CRUD and higher-level logic.
+end note
 
 @enduml

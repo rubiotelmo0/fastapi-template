@@ -4,7 +4,24 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field  # pylint: disable=no-name-in-module
+from pydantic import BaseModel, ConfigDict, Field, field_validator  # pylint: disable=no-name-in-module
+
+
+def _normalize_item_name(value: str | None) -> str | None:
+    """Trim item names and reject blank values."""
+    if value is None:
+        return None
+    normalized_name = value.strip()
+    if not normalized_name:
+        raise ValueError("Item name cannot be blank.")
+    return normalized_name
+
+
+def _normalize_description(value: str | None) -> str | None:
+    """Trim item descriptions when provided."""
+    if value is None:
+        return None
+    return value.strip()
 
 
 class Message(BaseModel):
@@ -37,6 +54,24 @@ class ItemBase(BaseModel):
     )
     is_active: bool = Field(default=True, description="Whether the item is active.", examples=[True])
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value: str) -> str:
+        """Trim and validate item names before persistence."""
+        normalized_name = _normalize_item_name(value)
+        if normalized_name is None:
+            raise ValueError("Item name cannot be null.")
+        return normalized_name
+
+    @field_validator("description", mode="before")
+    @classmethod
+    def normalize_description(cls, value: str) -> str:
+        """Trim item descriptions before persistence."""
+        normalized_description = _normalize_description(value)
+        if normalized_description is None:
+            return ""
+        return normalized_description
+
 
 class Item(ItemBase):
     """Item schema definition."""
@@ -68,3 +103,27 @@ class ItemUpdate(BaseModel):
         examples=["Updated description for the starter item."],
     )
     is_active: Optional[bool] = Field(default=None, examples=[False])
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value: str | None) -> str | None:
+        """Trim and validate item names before persistence."""
+        return _normalize_item_name(value)
+
+    @field_validator("description", mode="before")
+    @classmethod
+    def normalize_description(cls, value: str | None) -> str | None:
+        """Trim item descriptions before persistence."""
+        return _normalize_description(value)
+
+
+class ItemSummary(BaseModel):
+    """Derived summary for the example item catalog."""
+
+    total_items: int = Field(description="Total number of stored items.", examples=[3])
+    active_items: int = Field(description="Number of active items.", examples=[2])
+    inactive_items: int = Field(description="Number of inactive items.", examples=[1])
+    item_names: list[str] = Field(
+        description="Ordered list of item names currently stored.",
+        examples=[["starter-item", "inactive-item", "reportable-item"]],
+    )

@@ -7,9 +7,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.business_logic.item_service import ItemService
-from app.dependencies import get_db, get_item_service
-from app.sql import schemas
+from app.business_logic.item_summary import ItemSummaryService
+from app.dependencies import get_db, get_item_summary_service
+from app.sql import crud, schemas
 
 from .router_utils import raise_and_log_error
 
@@ -43,14 +43,11 @@ async def health_check():
 async def create_item(
     item_schema: schemas.ItemCreate,
     db: AsyncSession = Depends(get_db),
-    item_service: ItemService = Depends(get_item_service),
 ):
     """Create a new example resource."""
     logger.debug("POST '/items' endpoint called.")
     try:
-        return await item_service.create_item(db, item_schema)
-    except ValueError as exc:
-        raise_and_log_error(logger, status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc))
+        return await crud.create_item(db, item_schema)
     except IntegrityError:
         await db.rollback()
         raise_and_log_error(logger, status.HTTP_409_CONFLICT, "An item with that name already exists.")
@@ -64,11 +61,25 @@ async def create_item(
 )
 async def get_item_list(
     db: AsyncSession = Depends(get_db),
-    item_service: ItemService = Depends(get_item_service),
 ):
     """Return all stored items."""
     logger.debug("GET '/items' endpoint called.")
-    return await item_service.list_items(db)
+    return await crud.get_item_list(db)
+
+
+@router.get(
+    "/items/summary",
+    response_model=schemas.ItemSummary,
+    summary="Retrieve an item catalog summary",
+    tags=["Items"],
+)
+async def get_item_summary(
+    db: AsyncSession = Depends(get_db),
+    item_summary_service: ItemSummaryService = Depends(get_item_summary_service),
+):
+    """Return a derived summary built from stored items."""
+    logger.debug("GET '/items/summary' endpoint called.")
+    return await item_summary_service.get_item_summary(db)
 
 
 @router.get(
@@ -89,11 +100,10 @@ async def get_item_list(
 async def get_single_item(
     item_id: int,
     db: AsyncSession = Depends(get_db),
-    item_service: ItemService = Depends(get_item_service),
 ):
     """Return a single item."""
     logger.debug("GET '/items/%i' endpoint called.", item_id)
-    item = await item_service.get_item(db, item_id)
+    item = await crud.get_item(db, item_id)
     if not item:
         raise_and_log_error(logger, status.HTTP_404_NOT_FOUND, f"Item {item_id} not found.")
     return item
@@ -119,17 +129,14 @@ async def update_item(
     item_id: int,
     item_schema: schemas.ItemUpdate,
     db: AsyncSession = Depends(get_db),
-    item_service: ItemService = Depends(get_item_service),
 ):
     """Update the selected item."""
     logger.debug("PATCH '/items/%i' endpoint called.", item_id)
-    item = await item_service.get_item(db, item_id)
+    item = await crud.get_item(db, item_id)
     if not item:
         raise_and_log_error(logger, status.HTTP_404_NOT_FOUND, f"Item {item_id} not found.")
     try:
-        return await item_service.update_item(db, item, item_schema)
-    except ValueError as exc:
-        raise_and_log_error(logger, status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc))
+        return await crud.update_item(db, item, item_schema)
     except IntegrityError:
         await db.rollback()
         raise_and_log_error(logger, status.HTTP_409_CONFLICT, "An item with that name already exists.")
@@ -154,12 +161,11 @@ async def update_item(
 async def delete_item(
     item_id: int,
     db: AsyncSession = Depends(get_db),
-    item_service: ItemService = Depends(get_item_service),
 ):
     """Delete the selected item."""
     logger.debug("DELETE '/items/%i' endpoint called.", item_id)
-    item = await item_service.get_item(db, item_id)
+    item = await crud.get_item(db, item_id)
     if not item:
         raise_and_log_error(logger, status.HTTP_404_NOT_FOUND, f"Item {item_id} not found.")
-    await item_service.delete_item(db, item)
+    await crud.delete_item(db, item)
     return schemas.Message(detail=f"Item {item_id} deleted.")

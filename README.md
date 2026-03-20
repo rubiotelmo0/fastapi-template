@@ -7,7 +7,9 @@
 
 Reusable starter repository for a FastAPI service with a clear application layout, async SQLAlchemy, Docker support, and a small sample CRUD resource you can replace with your own domain.
 
-![architecture UML](./docs/uml/architecture.png)
+Architecture source: [`docs/uml/architecture.puml`](./docs/uml/architecture.puml)
+
+![architecture](./docs/uml/architecture.png)
 
 ## Getting Started
 
@@ -74,6 +76,7 @@ The local workflow uses `fastapi_app/app.db`. The Docker workflow persists SQLit
 
 - `GET /`: basic health payload with app name and version.
 - `GET /items`: list all items.
+- `GET /items/summary`: derived item summary built through the `business_logic` module.
 - `POST /items`: create an item.
 - `GET /items/{item_id}`: retrieve one item.
 - `PATCH /items/{item_id}`: partially update one item.
@@ -81,20 +84,20 @@ The local workflow uses `fastapi_app/app.db`. The Docker workflow persists SQLit
 
 ### Development
 
-This template keeps the project split into API, dependency, business logic, and persistence layers:
+This template keeps the project split into API, dependency, business logic, and persistence layers. The sample item CRUD routes call `app/sql/crud.py` directly, while `app/business_logic/` is reserved for additional domain behavior such as derived summaries or cross-model workflows:
 
 - `fastapi_app/app/main.py`: application startup, OpenAPI metadata, lifespan hooks.
-- `fastapi_app/app/routers/`: API layer.
-- `fastapi_app/app/dependencies.py`: dependency injection for shared services and database sessions.
-- `fastapi_app/app/business_logic/`: service layer where domain rules live.
-- `fastapi_app/app/sql/`: database engine, models, schemas, and CRUD helpers.
+- `fastapi_app/app/routers/`: API layer. The example CRUD handlers live here and call the CRUD helpers directly.
+- `fastapi_app/app/dependencies.py`: dependency injection for database sessions and optional shared business-logic services.
+- `fastapi_app/app/business_logic/`: modular domain logic for derived responses, orchestration, or workflows that should not live in raw CRUD helpers.
+- `fastapi_app/app/sql/`: database engine, models, schemas, and CRUD helpers. In the example app, CRUD helpers consume validated schema payloads for create and update operations.
 - `compose.yml`: local container orchestration.
 - `dot_env_example`: starter environment variables for local and Docker usage.
 - `docs/`: Bruno requests and a simple PlantUML architecture diagram.
 
 Recommended first changes after cloning:
 
-1. Replace the sample `Item` model, schemas, CRUD helpers, and router endpoints with your own entities.
+1. Replace the sample `Item` model, schemas, CRUD helpers, summary business logic, and router endpoints with your own entities.
 2. Split `routers/main_router.py` into multiple router modules once your API grows.
 3. Adjust environment defaults in `dot_env_example` and `compose.yml` for your service name and database backend.
 4. Add automated tests and CI checks for your project needs.
@@ -209,8 +212,8 @@ Once the template is cloned, it needs to be refactored for the project it will b
 
 * `README.md`: Replace the template explanation with a project-specific description.
 * `.devcontainer`: Update environment variable names and container names.
-* `fastapi_app`: Replace the example `Item` entity with the entities your project will use.
-* `docs`: Replace the single-item template example with documentation for your project’s entities.
+* `fastapi_app`: Replace the example `Item` entity, CRUD flow, and summary business logic with the entities and workflows your project will use.
+* `docs`: Replace the item CRUD and summary examples with documentation for your project’s entities.
 
 > [!TIP]
 > You can copy the list above into a coding agent, briefly explain what the new project is about and its main entities, and ask it to perform the necessary updates.
@@ -219,6 +222,8 @@ Once the template is cloned, it needs to be refactored for the project it will b
 
 Tasks to improve this template.
 
+- [ ] Better explain each module under `fastapi_app`.
+- [ ] Separate `requirements.txt`, one for the devcontainer and the other one for production.
 - [ ] Add relevant agent skills.
 - [ ] Follow official pyproject project setup (`src/...`).
 - [ ] Add out of the box `pytest` support.

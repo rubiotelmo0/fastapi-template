@@ -3,15 +3,16 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import models
+from . import models, schemas
 
 
-async def create_item(db: AsyncSession, name: str, description: str, is_active: bool):
+async def create_item(
+    db: AsyncSession,
+    item_data: schemas.ItemCreate,
+) -> models.Item:
     """Persist a new item into the database."""
     db_item = models.Item(
-        name=name,
-        description=description,
-        is_active=is_active,
+        **item_data.model_dump(),
     )
     db.add(db_item)
     await db.commit()
@@ -19,27 +20,31 @@ async def create_item(db: AsyncSession, name: str, description: str, is_active: 
     return db_item
 
 
-async def get_item_list(db: AsyncSession):
+async def get_item_list(db: AsyncSession) -> list[models.Item]:
     """Load all items from the database."""
     stmt = select(models.Item).order_by(models.Item.id)
     return await get_list_statement_result(db, stmt)
 
 
-async def get_item(db: AsyncSession, item_id: int):
+async def get_item(db: AsyncSession, item_id: int) -> models.Item | None:
     """Load an item from the database."""
     return await get_element_by_id(db, models.Item, item_id)
 
 
-async def update_item(db: AsyncSession, item: models.Item, payload: dict):
+async def update_item(
+    db: AsyncSession,
+    item: models.Item,
+    item_data: schemas.ItemUpdate,
+) -> models.Item:
     """Persist changes to an existing item."""
-    for field, value in payload.items():
+    for field, value in item_data.model_dump(exclude_unset=True).items():
         setattr(item, field, value)
     await db.commit()
     await db.refresh(item)
     return item
 
 
-async def delete_item(db: AsyncSession, item: models.Item):
+async def delete_item(db: AsyncSession, item: models.Item) -> None:
     """Delete the selected item."""
     await db.delete(item)
     await db.commit()

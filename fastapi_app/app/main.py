@@ -37,7 +37,8 @@ APP_VERSION = os.getenv("APP_VERSION", "0.1.0")
 logger.info("Running app version %s", APP_VERSION)
 
 DESCRIPTION = """
-Starter FastAPI project with routers, dependencies, business logic, and async SQLAlchemy.
+Starter FastAPI project with direct router-to-CRUD flows for standard endpoints, optional
+business logic modules for derived behavior, and async SQLAlchemy.
 """
 
 tag_metadata = [
@@ -47,7 +48,7 @@ tag_metadata = [
     },
     {
         "name": "Items",
-        "description": "Example CRUD endpoints you can replace with your own domain.",
+        "description": "Example CRUD endpoints plus a derived summary endpoint.",
     },
 ]
 
