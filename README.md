@@ -223,6 +223,8 @@ Once the template is cloned, it needs to be refactored for the project it will b
 Tasks to improve this template.
 
 - [ ] Use `pyproject.toml` file and specify prod and dev dependency groups.
+- [ ] Update dependencies to latest versions.
+- [ ] Fix the Schemas (only for creation and read).
 - [ ] Add relevant agent skills (generate `business_logic` modules, generate new entities, E2E testing...).
 - [ ] Follow official pyproject project setup (`src/...`).
 - [ ] Add out of the box `pytest` support.
