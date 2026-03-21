@@ -222,8 +222,7 @@ Once the template is cloned, it needs to be refactored for the project it will b
 
 Tasks to improve this template.
 
-- [ ] Better explain each module under `fastapi_app`.
-- [ ] Separate `requirements.txt`, one for the devcontainer and the other one for production.
+- [ ] Use `pyproject.toml` file and specify prod and dev dependency groups.
 - [ ] Add relevant agent skills (generate `business_logic` modules, generate new entities, E2E testing...).
 - [ ] Follow official pyproject project setup (`src/...`).
 - [ ] Add out of the box `pytest` support.
